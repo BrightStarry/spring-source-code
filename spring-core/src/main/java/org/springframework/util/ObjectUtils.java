@@ -602,7 +602,7 @@ public abstract class ObjectUtils {
 	//---------------------------------------------------------------------
 
 	/**
-	 * Return a String representation of an object's overall identity.
+	 * 返回一个对象的标识字符串,也就是类路径名 + @ + 16进制显示的hashcode 或 空字符串
 	 * @param obj the object (may be {@code null})
 	 * @return the object's identity as String representation,
 	 * or an empty String if the object was {@code null}

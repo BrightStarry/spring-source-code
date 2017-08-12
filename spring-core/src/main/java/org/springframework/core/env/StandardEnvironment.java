@@ -17,9 +17,7 @@
 package org.springframework.core.env;
 
 /**
- * {@link Environment} implementation suitable for use in 'standard' (i.e. non-web)
- * applications.
- *
+ * {@link Environment}接口的标准实现类(不是web);
  * <p>In addition to the usual functions of a {@link ConfigurableEnvironment} such as
  * property resolution and profile-related operations, this implementation configures two
  * default property sources, to be searched in the following order:

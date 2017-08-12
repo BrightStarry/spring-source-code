@@ -142,14 +142,8 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Return the default ClassLoader to use: typically the thread context
-	 * ClassLoader, if available; the ClassLoader that loaded the ClassUtils
-	 * class will be used as fallback.
-	 * <p>Call this method if you intend to use the thread context ClassLoader
-	 * in a scenario where you clearly prefer a non-null ClassLoader reference:
-	 * for example, for class path resource loading (but not necessarily for
-	 * {@code Class.forName}, which accepts a {@code null} ClassLoader
-	 * reference as well).
+	 * 获取默认加载器
+	 * 优先级为 当前线程类加载器 -> 当前工具类类加载器 -> 系统加载器 -> 空...
 	 * @return the default ClassLoader (only {@code null} if even the system
 	 * ClassLoader isn't accessible)
 	 * @see Thread#getContextClassLoader()
@@ -298,14 +292,11 @@ public abstract class ClassUtils {
 	}
 
 	/**
-	 * Resolve the given class name as primitive class, if appropriate,
-	 * according to the JVM's naming rules for primitive classes.
-	 * <p>Also supports the JVM's internal class names for primitive arrays.
-	 * Does <i>not</i> support the "[]" suffix notation for primitive arrays;
-	 * this is only supported by {@link #forName(String, ClassLoader)}.
-	 * @param name the name of the potentially primitive class
-	 * @return the primitive class, or {@code null} if the name does not denote
-	 * a primitive class or primitive array class
+	 * 将给定的类名解析为原始类，如果合适的话， 根据JVM的原始类的命名规则。
+	 * 还支持JVM的内部类名，用于原始数组。
+	 * 不支持对原始数组的“后缀”表示法; 这只支持@link forname(字符串，类加载器)。
+	 * @param name 是潜在的原始类的名称
+	 * @return 原始类，或null，如果名称不表示 原始类或原始数组类
 	 */
 	@Nullable
 	public static Class<?> resolvePrimitiveClassName(@Nullable String name) {

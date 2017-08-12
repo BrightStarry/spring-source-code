@@ -27,17 +27,14 @@ import org.springframework.util.ClassUtils;
 import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
+
+
 /**
- * {@link Resource} implementation for class path resources. Uses either a
- * given {@link ClassLoader} or a given {@link Class} for loading resources.
- *
- * <p>Supports resolution as {@code java.io.File} if the class path
- * resource resides in the file system, but not for resources in a JAR.
- * Always supports resolution as URL.
- *
- * @author Juergen Hoeller
- * @author Sam Brannen
- * @since 28.12.2003
+ * {@link Resource} 为了类资源路径实现.
+ * 使用给定的{@link ClassLoader}或{@link Class}加载资源.
+ * <p>如果类路径资源在文件系统中，支持解析为{@link java.io.File}，而不是用于JAR中的资源。
+ * 也就是不能把JAR中的资源解析为File.但全都支持解析为URL.
+ * <p>其实就类似一个File,可以根据类路径或类加载器路径获取资源文件
  * @see ClassLoader#getResourceAsStream(String)
  * @see Class#getResourceAsStream(String)
  */
@@ -62,6 +59,7 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 * @see java.lang.ClassLoader#getResourceAsStream(String)
 	 * @see org.springframework.util.ClassUtils#getDefaultClassLoader()
 	 */
+
 	public ClassPathResource(String path) {
 		this(path, (ClassLoader) null);
 	}
@@ -77,11 +75,15 @@ public class ClassPathResource extends AbstractFileResolvingResource {
 	 */
 	public ClassPathResource(String path, @Nullable ClassLoader classLoader) {
 		Assert.notNull(path, "Path must not be null");
+		//将其变成规范的路径，确保不为空，替换路径分隔符等
 		String pathToUse = StringUtils.cleanPath(path);
+		//如果路径不以/开头，去掉第一个字符
 		if (pathToUse.startsWith("/")) {
 			pathToUse = pathToUse.substring(1);
 		}
 		this.path = pathToUse;
+		//如果类加载器为空，获取默认类加载器，
+		//优先级为 线程上下文类加载器 -> 该工具类的类加载器 -> 系统类加载器 -> 空加载器(科科，这个spring的程序员还卖萌)
 		this.classLoader = (classLoader != null ? classLoader : ClassUtils.getDefaultClassLoader());
 	}
 

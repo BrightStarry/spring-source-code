@@ -271,35 +271,35 @@ public abstract class WebApplicationContextUtils {
 		initServletPropertySources(propertySources, servletContext, null);
 	}
 
+
 	/**
-	 * Replace {@code Servlet}-based {@link StubPropertySource stub property sources} with
-	 * actual instances populated with the given {@code servletContext} and
-	 * {@code servletConfig} objects.
-	 * <p>This method is idempotent with respect to the fact it may be called any number
-	 * of times but will perform replacement of stub property sources with their
-	 * corresponding actual property sources once and only once.
-	 * @param propertySources the {@link MutablePropertySources} to initialize (must not
-	 * be {@code null})
-	 * @param servletContext the current {@link ServletContext} (ignored if {@code null}
-	 * or if the {@link StandardServletEnvironment#SERVLET_CONTEXT_PROPERTY_SOURCE_NAME
-	 * servlet context property source} has already been initialized)
-	 * @param servletConfig the current {@link ServletConfig} (ignored if {@code null}
-	 * or if the {@link StandardServletEnvironment#SERVLET_CONFIG_PROPERTY_SOURCE_NAME
-	 * servlet config property source} has already been initialized)
+	 *
+	 * 下面都是扯淡，就是把ServletContext 和 ServletConfig 对应上各自的key，组成了一个所谓的ServletContextPropertySource类，
+	 * 然后将这个类存储到了MutablePropertySources类的list集合中。注意，存储的时候用的是list.set而不是add，也就是替换而不是增加，
+	 * 所以这个类名字叫可变属性资源
+	 * <p>替换 Servlet，使用{@link StubPropertySource}存储ServletContext和ServletConfig中的属性资源
+	 * <p>这个方法是幂等的(多次执行和执行一次的结果相同)，但是相应的属性源的替换实际上只发生了一次
+	 * @param propertySources 必须非空
+	 * @param servletContext 如果为空，
+	 * 或者{@link StandardServletEnvironment#SERVLET_CONTEXT_PROPERTY_SOURCE_NAME servlet context property source} 已经初始化，则忽略
+	 * @param servletConfig 同上
 	 * @see org.springframework.core.env.PropertySource.StubPropertySource
 	 * @see org.springframework.core.env.ConfigurableEnvironment#getPropertySources()
 	 */
 	public static void initServletPropertySources(
 			MutablePropertySources propertySources, @Nullable ServletContext servletContext, @Nullable ServletConfig servletConfig) {
-
+		//断言， 可变属性资源不为空
 		Assert.notNull(propertySources, "'propertySources' must not be null");
+		//如果ServletContext不为空，并且属性文件中包含了 对应属性名的属性，并且该属性值是StubPropertySource或其子类
 		if (servletContext != null && propertySources.contains(StandardServletEnvironment.SERVLET_CONTEXT_PROPERTY_SOURCE_NAME) &&
 				propertySources.get(StandardServletEnvironment.SERVLET_CONTEXT_PROPERTY_SOURCE_NAME) instanceof StubPropertySource) {
+
 			propertySources.replace(StandardServletEnvironment.SERVLET_CONTEXT_PROPERTY_SOURCE_NAME,
 					new ServletContextPropertySource(StandardServletEnvironment.SERVLET_CONTEXT_PROPERTY_SOURCE_NAME, servletContext));
 		}
 		if (servletConfig != null && propertySources.contains(StandardServletEnvironment.SERVLET_CONFIG_PROPERTY_SOURCE_NAME) &&
 				propertySources.get(StandardServletEnvironment.SERVLET_CONFIG_PROPERTY_SOURCE_NAME) instanceof StubPropertySource) {
+
 			propertySources.replace(StandardServletEnvironment.SERVLET_CONFIG_PROPERTY_SOURCE_NAME,
 					new ServletConfigPropertySource(StandardServletEnvironment.SERVLET_CONFIG_PROPERTY_SOURCE_NAME, servletConfig));
 		}

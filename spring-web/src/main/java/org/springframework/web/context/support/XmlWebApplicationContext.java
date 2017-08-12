@@ -24,35 +24,28 @@ import org.springframework.beans.factory.xml.ResourceEntityResolver;
 import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
 
 /**
- * {@link org.springframework.web.context.WebApplicationContext} implementation
- * which takes its configuration from XML documents, understood by an
- * {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.
- * This is essentially the equivalent of
- * {@link org.springframework.context.support.GenericXmlApplicationContext}
- * for a web environment.
+ * {@link org.springframework.web.context.WebApplicationContext}的实现类，从xml中读取配置,
+ * 明白一个 {@link org.springframework.beans.factory.xml.XmlBeanDefinitionReader}.
+ * <p>本质上等价于{@link org.springframework.context.support.GenericXmlApplicationContext}的web环境
+ * <p>默认，将从"/WEB-INF/applicationContext.xml"读取配置,
+ * and "/WEB-INF/test-servlet.xml" for a context with the namespace
+ * "test-servlet" (like for a DispatcherServlet instance with the servlet-name "test")
  *
- * <p>By default, the configuration will be taken from "/WEB-INF/applicationContext.xml"
- * for the root context, and "/WEB-INF/test-servlet.xml" for a context with the namespace
- * "test-servlet" (like for a DispatcherServlet instance with the servlet-name "test").
+ * <p>可以通过web.xml中的context-param 的"contextConfigLocation"参数覆盖默认 配置文件位置.
+ * 配置文件可以是"/WEB-INF/context.xml"这样的具体文件，或者/WEB-INF/*-context.xml"这样的模式
+ * (查看 {@link org.springframework.util.PathMatcher}javadoc 模式详情).
+ *
+ * <p>注意：如果有多个配置位置，后面的配置文件中的Bean将覆盖之前的配置文件中的Bean.
+ * 可以利用额外的配置文件故意覆盖某些bean
+ *
+ * <p> WebApplicationContext读取一个不同格式的Bean，可以使用{@link AbstractRefreshableWebApplicationContext}的子类。
+ * 也就是配置自定义容器，通过web.xml中的inti-param或context-param的参数名为“contextClass”的参数
+ *
  *
  * <p>The config location defaults can be overridden via the "contextConfigLocation"
- * context-param of {@link org.springframework.web.context.ContextLoader} and servlet
- * init-param of {@link org.springframework.web.servlet.FrameworkServlet}. Config locations
- * can either denote concrete files like "/WEB-INF/context.xml" or Ant-style patterns
- * like "/WEB-INF/*-context.xml" (see {@link org.springframework.util.PathMatcher}
- * javadoc for pattern details).
- *
- * <p>Note: In case of multiple config locations, later bean definitions will
- * override ones defined in earlier loaded files. This can be leveraged to
- * deliberately override certain bean definitions via an extra XML file.
- *
- * <p><b>For a WebApplicationContext that reads in a different bean definition format,
- * create an analogous subclass of {@link AbstractRefreshableWebApplicationContext}.</b>
- * Such a context implementation can be specified as "contextClass" context-param
- * for ContextLoader or "contextClass" init-param for FrameworkServlet.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
+    context-param of {@link org.springframework.web.context.ContextLoader} and servlet
+   init-param of {@link org.springframework.web.servlet.FrameworkServlet}.
+
  * @see #setNamespace
  * @see #setConfigLocations
  * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
@@ -61,31 +54,39 @@ import org.springframework.beans.factory.xml.XmlBeanDefinitionReader;
  */
 public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationContext {
 
-	/** Default config location for the root context */
+	/**
+	 * 默认配置文件路径
+	 */
 	public static final String DEFAULT_CONFIG_LOCATION = "/WEB-INF/applicationContext.xml";
 
-	/** Default prefix for building a config location for a namespace */
+	/**
+	 * 默认配置文件路径前缀
+	 */
 	public static final String DEFAULT_CONFIG_LOCATION_PREFIX = "/WEB-INF/";
 
-	/** Default suffix for building a config location for a namespace */
+	/**
+	 * 默认配置文件路径后缀
+	 */
 	public static final String DEFAULT_CONFIG_LOCATION_SUFFIX = ".xml";
 
 
 	/**
-	 * Loads the bean definitions via an XmlBeanDefinitionReader.
+	 * 通过{@link XmlBeanDefinitionReader} 加载定义的Bean，需要传入{@link DefaultListableBeanFactory}
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader
 	 * @see #initBeanDefinitionReader
 	 * @see #loadBeanDefinitions
 	 */
 	@Override
 	protected void loadBeanDefinitions(DefaultListableBeanFactory beanFactory) throws BeansException, IOException {
-		// Create a new XmlBeanDefinitionReader for the given BeanFactory.
+		// 通过给定的BeanFactory创建该类
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
-		// Configure the bean definition reader with this context's
-		// resource loading environment.
+		// 配置这个XmlBeanDefinitionReader
+		//设置环境类,从该容器类中加载环境类，第一次调用会创建
 		beanDefinitionReader.setEnvironment(getEnvironment());
+		//将该容器作为 资源加载器
 		beanDefinitionReader.setResourceLoader(this);
+		//将该类作为参数，创建 资源实体解析器类,设置到环境类中
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
 		// Allow a subclass to provide custom initialization of the reader,

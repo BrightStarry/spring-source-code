@@ -101,9 +101,9 @@ public abstract class BeanUtils {
 	}
 
 	/**
-	 * Instantiate a class using its no-arg constructor.
-	 * <p>Note that this method tries to set the constructor accessible
-	 * if given a non-accessible (that is, non-public) constructor.
+	 * 使用类的无参构造函数实例化它
+	 * <p>注意：如果无参构造函数是不可访问的，该方法会试图将它变成可访问的
+	 *
 	 * @param clazz class to instantiate
 	 * @return the new instance
 	 * @throws BeanInstantiationException if the bean cannot be instantiated

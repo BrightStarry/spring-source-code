@@ -19,13 +19,10 @@ package org.springframework.core.env;
 import java.util.Map;
 
 /**
- * Configuration interface to be implemented by most if not all {@link Environment} types.
- * Provides facilities for setting active and default profiles and manipulating underlying
- * property sources. Allows clients to set and validate required properties, customize the
- * conversion service and more through the {@link ConfigurablePropertyResolver}
- * superinterface.
- *
- * <h2>Manipulating property sources</h2>
+ * 最主要的配置接口，如果不是所有的{@link Environment}类型都可以实现。
+ * 提供用于设置活动和默认配置文件和操作底层的属性来源。允许客户端设置和验证所需的属性，
+ * 定制 转换服务和更多的通过{ @link ConfigurablePropertyResolver } 它的超接口
+ * <h2>操作属性资源</h2>
  * <p>Property sources may be removed, reordered, or replaced; and additional
  * property sources may be added using the {@link MutablePropertySources}
  * instance returned from {@link #getPropertySources()}. The following examples

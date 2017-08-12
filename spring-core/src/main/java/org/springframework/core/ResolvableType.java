@@ -42,16 +42,22 @@ import org.springframework.util.ObjectUtils;
 import org.springframework.util.StringUtils;
 
 /**
- * Encapsulates a Java {@link java.lang.reflect.Type}, providing access to
- * {@link #getSuperType() supertypes}, {@link #getInterfaces() interfaces}, and
- * {@link #getGeneric(int...) generic parameters} along with the ability to ultimately
- * {@link #resolve() resolve} to a {@link java.lang.Class}.
- *
- * <p>{@code ResolvableTypes} may be obtained from {@link #forField(Field) fields},
- * {@link #forMethodParameter(Method, int) method parameters},
- * {@link #forMethodReturnType(Method) method returns} or
- * {@link #forClass(Class) classes}. Most methods on this class will themselves return
- * {@link ResolvableType}s, allowing easy navigation. For example:
+ * 可解析的类型
+ * <p>工具类，封装了一些获取类属性、方法参数、泛型类型的方法</>
+ * <p>封装一个{@link java.lang.reflect.Type}类，提供{@link #getSuperType()}方法访问父类,
+ * {@link #getInterfaces()}访问接口，{@link #getGeneric(int...)}获取泛型参数,
+ * {@link #resolve() resolve}方法将该类解析为{@link java.lang.Class}
+ * <p>该类可以通过{@link #forField(Field)}获取属性，
+ * {@link #forMethodParameter(Method, int) }获取方法参数,
+ * {@link #forMethodReturnType(Method) }获取方法返回值，
+ * {@link #forClass(Class) }获取类对象，
+ * 这个类大部分方法都返回该类；
+ * <p>下面是简单的例子：也就是一个<Integer,List<String>>泛型的 MAP,
+ * <p>大致明白了这个类的大致作用，主要如下：
+ * <ul>
+ *     <li>getGeneric(0)方法可以获取第一个泛型参数,包括该泛型参数的泛型参数</li>
+ *     <li>getGeneric(0).resolve()方法可以获取第一个泛型参数,且不会显示出这个泛型参数中的泛型参数</li>
+ * </ul>
  * <pre class="code">
  * private HashMap&lt;Integer, List&lt;String&gt;&gt; myMap;
  *
@@ -65,11 +71,6 @@ import org.springframework.util.StringUtils;
  *     t.resolveGeneric(1, 0); // String
  * }
  * </pre>
- *
- * @author Phillip Webb
- * @author Juergen Hoeller
- * @author Stephane Nicoll
- * @since 4.0
  * @see #forField(Field)
  * @see #forMethodParameter(Method, int)
  * @see #forMethodReturnType(Method)
@@ -83,24 +84,27 @@ import org.springframework.util.StringUtils;
 public class ResolvableType implements Serializable {
 
 	/**
-	 * {@code ResolvableType} returned when no value is available. {@code NONE} is used
-	 * in preference to {@code null} so that multiple method calls can be safely chained.
+	 * 在没有返回值时返回这个属性，表示一个空类型，以便方法间可以安全的调用
 	 */
 	public static final ResolvableType NONE = new ResolvableType(EmptyType.INSTANCE, null, null, 0);
-
+	/**
+	 * 元素为0的该类数组
+	 */
 	private static final ResolvableType[] EMPTY_TYPES_ARRAY = new ResolvableType[0];
-
+	/**
+	 * 一个软引用的同步map，用于缓存 -当内存不足时，该map中的数据会被回收
+	 */
 	private static final ConcurrentReferenceHashMap<ResolvableType, ResolvableType> cache =
 			new ConcurrentReferenceHashMap<>(256);
 
 
 	/**
-	 * The underlying Java type being managed.
+	 * 正在管理的底层Java类型
 	 */
 	private final Type type;
 
 	/**
-	 * Optional provider for the type.
+	 * 类型的可选提供者
 	 */
 	@Nullable
 	private final TypeProvider typeProvider;

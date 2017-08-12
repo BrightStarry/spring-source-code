@@ -17,20 +17,13 @@
 package org.springframework.context;
 
 /**
- * Callback interface for initializing a Spring {@link ConfigurableApplicationContext}
- * prior to being {@linkplain ConfigurableApplicationContext#refresh() refreshed}.
  *
- * <p>Typically used within web applications that require some programmatic initialization
- * of the application context. For example, registering property sources or activating
- * profiles against the {@linkplain ConfigurableApplicationContext#getEnvironment()
- * context's environment}. See {@code ContextLoader} and {@code FrameworkServlet} support
- * for declaring a "contextInitializerClasses" context-param and init-param, respectively.
- *
- * <p>{@code ApplicationContextInitializer} processors are encouraged to detect
- * whether Spring's {@link org.springframework.core.Ordered Ordered} interface has been
- * implemented or if the @{@link org.springframework.core.annotation.Order Order}
- * annotation is present and to sort instances accordingly if so prior to invocation.
- *
+ * 回调接口，在{@link ConfigurableApplicationContext#refresh()}刷新前,初始化{@link ConfigurableApplicationContext}
+ * <p>通常用在web应用程序中需要对应用程序上下文做一些程序初始化时。例如：注册property资源文件或者
+ * 激活对上下文环境的环境配置文件{@link ConfigurableApplicationContext#getEnvironment()}。
+ * 分别参见ContextLoader和FrameworkServlet，分别通过在<context-param>和<init-param>中声明contextInitializerClasses参数来的支持。
+ * <p>该类处理器检测是否实现了 {@link org.springframework.core.Ordered Ordered}接口，
+ * 或者是否有 @{@link org.springframework.core.annotation.Order Order}注解的实例存在，以此按声明的顺序进行调用
  * @author Chris Beams
  * @since 3.1
  * @see org.springframework.web.context.ContextLoader#customizeContext
@@ -41,8 +34,8 @@ package org.springframework.context;
 public interface ApplicationContextInitializer<C extends ConfigurableApplicationContext> {
 
 	/**
-	 * Initialize the given application context.
-	 * @param applicationContext the application to configure
+	 * 初始化给定的application context（必须继承ConfigurableApplicationContext）
+	 * @param applicationContext
 	 */
 	void initialize(C applicationContext);
 

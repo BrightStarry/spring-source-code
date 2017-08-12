@@ -24,10 +24,12 @@ import org.springframework.lang.Nullable;
 
 /**
  * Specialization of {@link ConfigurableEnvironment} allowing initialization of
- * servlet-related {@link org.springframework.core.env.PropertySource} objects at the
- * earliest moment that the {@link ServletContext} and (optionally) {@link ServletConfig}
- * become available.
- *
+  servlet-related {@link org.springframework.core.env.PropertySource} objects at the
+  earliest moment that the {@link ServletContext} and (optionally) {@link ServletConfig}
+  become available.
+ * {@link ConfigurableEnvironment}接口下专门的允许初始化servlet相关的
+ * {@link org.springframework.core.env.PropertySource}对象
+ * <p>让ServletContext和ServletConfig变得可用
  * @author Chris Beams
  * @since 3.1.2
  * @see ConfigurableWebApplicationContext#getEnvironment()

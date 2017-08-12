@@ -27,14 +27,10 @@ import org.apache.commons.logging.LogFactory;
 import org.springframework.beans.factory.DisposableBean;
 
 /**
- * Web application listener that cleans up remaining disposable attributes
- * in the ServletContext, i.e. attributes which implement {@link DisposableBean}
- * and haven't been removed before. This is typically used for destroying objects
- * in "application" scope, for which the lifecycle implies destruction at the
- * very end of the web application's shutdown phase.
+ * Context清理监听器-实现Servlet监听器接口
+ * web容器监听器，清理ServletContext中剩余可用的属性,实现{@link DisposableBean}接口的以前没被移除的属性.
+ * 该类通常用于在application作用域范围内销毁对象，容器的关闭意味着生命周期的结束，
  *
- * @author Juergen Hoeller
- * @since 3.0
  * @see org.springframework.web.context.support.ServletContextScope
  * @see ContextLoaderListener
  */
@@ -47,6 +43,9 @@ public class ContextCleanupListener implements ServletContextListener {
 	public void contextInitialized(ServletContextEvent event) {
 	}
 
+	/**
+	 * 监听容器销毁事件，调用cleanupAttributes()方法
+	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
 		cleanupAttributes(event.getServletContext());
@@ -54,18 +53,25 @@ public class ContextCleanupListener implements ServletContextListener {
 
 
 	/**
-	 * Find all ServletContext attributes which implement {@link DisposableBean}
-	 * and destroy them, removing all affected ServletContext attributes eventually.
+	 * 找到ServletContext中所有实现{@link DisposableBean}接口的属性，并且销毁他们.
+	 * 删除所有受影响的属性.
 	 * @param sc the ServletContext to check
 	 */
 	static void cleanupAttributes(ServletContext sc) {
+		//返回ServletContext中所有可用的属性列表
 		Enumeration<String> attrNames = sc.getAttributeNames();
+		//迭代
 		while (attrNames.hasMoreElements()) {
+			//取出属性名
 			String attrName = attrNames.nextElement();
+			//如果该属性名以 这个字符串开头
 			if (attrName.startsWith("org.springframework.")) {
+				//获取属性值
 				Object attrValue = sc.getAttribute(attrName);
+				//如果该值实现了 DisposableBean接口，
 				if (attrValue instanceof DisposableBean) {
 					try {
+						//调用该值的销毁方法
 						((DisposableBean) attrValue).destroy();
 					}
 					catch (Throwable ex) {

@@ -30,10 +30,7 @@ import org.springframework.util.Assert;
 import org.springframework.util.ConcurrentReferenceHashMap;
 
 /**
- * Helper class for resolving generic types against type variables.
- *
- * <p>Mainly intended for usage within the framework, resolving method
- * parameter types even when they are declared generically.
+ * 帮助解析通用类型的泛型变量
  *
  * @author Juergen Hoeller
  * @author Rob Harrop
@@ -96,15 +93,17 @@ public abstract class GenericTypeResolver {
 
 	/**
 	 * Resolve the single type argument of the given generic interface against
-	 * the given target class which is assumed to implement the generic interface
-	 * and possibly declare a concrete type for its type variable.
+	  the given target class which is assumed to implement the generic interface
+	  and possibly declare a concrete type for its type variable.
+	 * 解析给定通用接口的单一类型参数 给定的目标类，它被假定实现了通用接口 并且可能为它的类型变量声明一个具体的类型
 	 * @param clazz the target class to check against
 	 * @param genericIfc the generic interface or superclass to resolve the type argument from
-	 * @return the resolved type of the argument, or {@code null} if not resolvable
+	 * @return 这个参数的解析类型，如果不能解析，返回空
 	 */
 	@Nullable
 	public static Class<?> resolveTypeArgument(Class<?> clazz, Class<?> genericIfc) {
 		ResolvableType resolvableType = ResolvableType.forClass(clazz).as(genericIfc);
+		//没有泛型直接返回空
 		if (!resolvableType.hasGenerics()) {
 			return null;
 		}

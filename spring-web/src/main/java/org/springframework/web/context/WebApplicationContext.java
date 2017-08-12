@@ -25,63 +25,58 @@ import org.springframework.lang.Nullable;
  * Interface to provide configuration for a web application. This is read-only while
  * the application is running, but may be reloaded if the implementation supports this.
  *
- * <p>This interface adds a {@code getServletContext()} method to the generic
- * ApplicationContext interface, and defines a well-known application attribute name
- * that the root context must be bound to in the bootstrap process.
- *
- * <p>Like generic application contexts, web application contexts are hierarchical.
- * There is a single root context per application, while each servlet in the application
- * (including a dispatcher servlet in the MVC framework) has its own child context.
- *
- * <p>In addition to standard application context lifecycle capabilities,
- * WebApplicationContext implementations need to detect {@link ServletContextAware}
- * beans and invoke the {@code setServletContext} method accordingly.
- *
- * @author Rod Johnson
- * @author Juergen Hoeller
- * @since January 19, 2001
+ * 为WEB应用提供配置的接口.这是只读的，虽然应用在运行，如果实现类支持，可能会重新加载
+ * <p>这个接口在{@link ApplicationContext}接口上增加了getServletContext()方法.
+ * 定义了一个众所皆知的应用属性名.
+ * root context必须绑定到引导过程中.
+ * <p>与ApplicationContext一样，webApplicationContext是分层的。
+ * 每个应用程序都有一个根上下文，而应用程序中的每个servlet (包括MVC框架中的dispatcher servlet)有它自己的子上下文。
+ * <p>除了标准ApplicationContext的生命周期功能外，该类还需要检测{@link ServletContextAware}，
+ * 并调用{@code setServletContext}方法
  * @see ServletContextAware#setServletContext
  */
 public interface WebApplicationContext extends ApplicationContext {
 
 	/**
-	 * Context attribute to bind root WebApplicationContext to on successful startup.
-	 * <p>Note: If the startup of the root context fails, this attribute can contain
-	 * an exception or error as value. Use WebApplicationContextUtils for convenient
-	 * lookup of the root WebApplicationContext.
+	 * 成功启动时，将该属性绑定到ServletContext上
+	 * <p>如果启动失败,该属性可以包含异常信息；使用{@link org.springframework.web.context.support.WebApplicationContextUtils}
+	 * 可以方便的查找到root WebApplicationContext
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#getWebApplicationContext
 	 * @see org.springframework.web.context.support.WebApplicationContextUtils#getRequiredWebApplicationContext
 	 */
 	String ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE = WebApplicationContext.class.getName() + ".ROOT";
 
+
 	/**
-	 * Scope identifier for request scope: "request".
-	 * Supported in addition to the standard scopes "singleton" and "prototype".
+	 * request范围的范围标识符; 也就是每个request中的bean的作用域
+	 * 支持除此之外的singleton(单例) 和 prototype（多例，每个请求(线程)一个实例）
 	 */
 	String SCOPE_REQUEST = "request";
 
 	/**
-	 * Scope identifier for session scope: "session".
-	 * Supported in addition to the standard scopes "singleton" and "prototype".
+	 * session范围的范围标识符;也就是每个session中的bean的作用域
+	 * 支持除此之外的singleton(单例) 和 prototype（多例，每个请求(线程)一个实例）
 	 */
 	String SCOPE_SESSION = "session";
 
 	/**
-	 * Scope identifier for the global web application scope: "application".
-	 * Supported in addition to the standard scopes "singleton" and "prototype".
+	 * application(全局)范围的范围标识符;也就是每个application中的bean的作用域
+	 * 支持除此之外的singleton(单例) 和 prototype（多例，每个请求(线程)一个实例）
 	 */
 	String SCOPE_APPLICATION = "application";
 
 	/**
-	 * Name of the ServletContext environment bean in the factory.
-	 * @see javax.servlet.ServletContext
+	 * ServletContext在容器中的Bean name
 	 */
 	String SERVLET_CONTEXT_BEAN_NAME = "servletContext";
 
 	/**
-	 * Name of the ServletContext/PortletContext init-params environment bean in the factory.
-	 * <p>Note: Possibly merged with ServletConfig/PortletConfig parameters.
-	 * ServletConfig parameters override ServletContext parameters of the same name.
+	 * ServletContext/PortletContext的初始化参数(web.xml中自定义的参数)在容器中的Bean name
+	 * 注意：可能与ServletConfig/PortletConfig 参数合并。
+	 * ServletConfig 参数覆盖相同名字的{@link ServletContext}参数.
+	 *
+	 * <p>web容器在创建servlet实例时，会将配置在web.xml中的init-param参数封装到ServletConfig中，
+	 * 并在调用Servlet的init方法时将ServletConfig对象传递给Servlet
 	 * @see javax.servlet.ServletContext#getInitParameterNames()
 	 * @see javax.servlet.ServletContext#getInitParameter(String)
 	 * @see javax.servlet.ServletConfig#getInitParameterNames()
@@ -90,15 +85,14 @@ public interface WebApplicationContext extends ApplicationContext {
 	String CONTEXT_PARAMETERS_BEAN_NAME = "contextParameters";
 
 	/**
-	 * Name of the ServletContext/PortletContext attributes environment bean in the factory.
+	 * ServletContext/PortletContext 的属性在容器中的Bean name
 	 * @see javax.servlet.ServletContext#getAttributeNames()
 	 * @see javax.servlet.ServletContext#getAttribute(String)
 	 */
 	String CONTEXT_ATTRIBUTES_BEAN_NAME = "contextAttributes";
 
-
 	/**
-	 * Return the standard Servlet API ServletContext for this application.
+	 * 从这个容器(ApplicationContext)中返回标准ServletContext
 	 */
 	@Nullable
 	ServletContext getServletContext();

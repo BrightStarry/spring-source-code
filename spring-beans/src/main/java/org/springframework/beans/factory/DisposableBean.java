@@ -17,6 +17,9 @@
 package org.springframework.beans.factory;
 
 /**
+ * 希望释放资源的属性实现的接口。
+ * 一个BeanFactory应该调用destroy方法,如果它处理了一个缓存的单例对象.
+ * 一个容器销毁时应该处理所有单例对象
  * Interface to be implemented by beans that want to release resources
  * on destruction. A BeanFactory is supposed to invoke the destroy
  * method if it disposes a cached singleton. An application context

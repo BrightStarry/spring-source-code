@@ -148,14 +148,11 @@ public interface ConfigurableApplicationContext extends ApplicationContext, Life
 	void addProtocolResolver(ProtocolResolver resolver);
 
 	/**
-	 * Load or refresh the persistent representation of the configuration,
-	 * which might an XML file, properties file, or relational database schema.
-	 * <p>As this is a startup method, it should destroy already created singletons
-	 * if it fails, to avoid dangling resources. In other words, after invocation
-	 * of that method, either all or no singletons at all should be instantiated.
-	 * @throws BeansException if the bean factory could not be initialized
-	 * @throws IllegalStateException if already initialized and multiple refresh
-	 * attempts are not supported
+	 * 加载或刷新配置属性，可能是从xml文件，properties文件或者数据库
+	 * <p>这是启动方法，如果失败了，需要销毁已将创建的单例对象.换句话说，再调用该方法后，
+	 * 要么全不，要么全部实例化
+	 * @throws BeansException 如果不能实例化BeanFactory
+	 * @throws IllegalStateException 如果已经实例化，并且多次刷新不支持
 	 */
 	void refresh() throws BeansException, IllegalStateException;
 

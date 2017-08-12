@@ -25,21 +25,11 @@ import javax.annotation.Nonnull;
 import javax.annotation.meta.TypeQualifierNickname;
 import javax.annotation.meta.When;
 
+
 /**
- * A common Spring annotation to declare that the annotated parameter,
- * return value or field could be {@code null} under some circumstances.
- *
- * <p>Should be used at parameters and return values level in association
- * with {@link NonNullApi} package-level annotations.
- *
- * <p>Leverages JSR-305 meta-annotations to indicate its semantics to
- * common tools with JSR-305 support.
- *
- * @author Sebastien Deleuze
- * @author Juergen Hoeller
- * @since 5.0
- * @see NonNullApi
- * @see javax.annotation.Nullable
+ * Spring通用注解，可声明在方法、属性、参数,类型(<? extends Object>)上面，
+ * 表明值或返回值在是可为空的。
+ * <p>在 {@link NonNullApi}这样的包级别注解的包中使用它
  */
 @Target({ElementType.METHOD, ElementType.PARAMETER, ElementType.TYPE_PARAMETER, ElementType.FIELD})
 @Retention(RetentionPolicy.RUNTIME)

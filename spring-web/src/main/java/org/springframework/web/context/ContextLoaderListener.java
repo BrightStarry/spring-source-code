@@ -99,7 +99,9 @@ public class ContextLoaderListener extends ContextLoader implements ServletConte
 	 */
 	@Override
 	public void contextDestroyed(ServletContextEvent event) {
+		//调用父类的关闭容器方法
 		closeWebApplicationContext(event.getServletContext());
+		//调用本来应该在web应用销毁时调用的清除ServletContext中所有实现DisposableBean接口的spring框架相关属性
 		ContextCleanupListener.cleanupAttributes(event.getServletContext());
 	}
 
