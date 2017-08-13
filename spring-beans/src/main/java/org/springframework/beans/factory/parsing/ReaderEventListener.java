@@ -19,8 +19,10 @@ package org.springframework.beans.factory.parsing;
 import java.util.EventListener;
 
 /**
+ * 读取器事件监听器
+ * 接收组件的回调接口，别名且导入在Bean注册过程的读取处理
  * Interface that receives callbacks for component, alias and import
- * registrations during a bean definition reading process.
+  registrations during a bean definition reading process.
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
@@ -30,27 +32,27 @@ import java.util.EventListener;
 public interface ReaderEventListener extends EventListener {
 
 	/**
-	 * Notification that the given defaults has been registered.
+	 * 通知 给定的默认值已经注册
 	 * @param defaultsDefinition a descriptor for the defaults
 	 * @see org.springframework.beans.factory.xml.DocumentDefaultsDefinition
 	 */
 	void defaultsRegistered(DefaultsDefinition defaultsDefinition);
 
 	/**
-	 * Notification that the given component has been registered.
+	 * 通知给定的组件已经注册
 	 * @param componentDefinition a descriptor for the new component
 	 * @see BeanComponentDefinition
 	 */
 	void componentRegistered(ComponentDefinition componentDefinition);
 
 	/**
-	 * Notification that the given alias has been registered.
+	 * 通知给定的别名已经注册了。
 	 * @param aliasDefinition a descriptor for the new alias
 	 */
 	void aliasRegistered(AliasDefinition aliasDefinition);
 
 	/**
-	 * Notification that the given import has been processed.
+	 * 通知 给定的import已经处理了
 	 * @param importDefinition a descriptor for the import
 	 */
 	void importProcessed(ImportDefinition importDefinition);

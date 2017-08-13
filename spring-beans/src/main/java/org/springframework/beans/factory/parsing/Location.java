@@ -21,7 +21,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Class that models an arbitrary location in a {@link Resource resource}.
+ * 在{@link Resource resource}中，为任意位置建模的类
  *
  * <p>Typically used to track the location of problematic or erroneous
  * metadata in XML configuration files. For example, a

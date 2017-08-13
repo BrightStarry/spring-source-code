@@ -19,9 +19,8 @@ package org.springframework.core.env;
 import org.springframework.lang.Nullable;
 
 /**
- * Interface for resolving properties against any underlying source.
+ * 解析任何底层资源的 资源解析器 接口
  *
- * @author Chris Beams
  * @author Juergen Hoeller
  * @since 3.1
  * @see Environment
@@ -30,8 +29,7 @@ import org.springframework.lang.Nullable;
 public interface PropertyResolver {
 
 	/**
-	 * Return whether the given property key is available for resolution,
-	 * i.e. if the value for the given key is not {@code null}.
+	 * 返回该资源是否包含指定的key，如果给定的key不是null
 	 */
 	boolean containsProperty(String key);
 

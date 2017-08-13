@@ -26,7 +26,7 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.StringUtils;
 
 /**
- * Detects whether an XML stream is using DTD- or XSD-based validation.
+ * 检测XML流是否使用DTD或基于xs验证的验证
  *
  * @author Rob Harrop
  * @author Juergen Hoeller
@@ -35,55 +35,55 @@ import org.springframework.util.StringUtils;
 public class XmlValidationModeDetector {
 
 	/**
-	 * Indicates that the validation should be disabled.
+	 * 表示验证应该被禁用
 	 */
 	public static final int VALIDATION_NONE = 0;
 
 	/**
+	 * 表明验证模式应该是自动控制的，因为我们找不到 一个清楚的指示（可能会阻塞指定的字符?）
 	 * Indicates that the validation mode should be auto-guessed, since we cannot find
-	 * a clear indication (probably choked on some special characters, or the like).
+	  a clear indication (probably choked on some special characters, or the like).
 	 */
 	public static final int VALIDATION_AUTO = 1;
 
 	/**
-	 * Indicates that DTD validation should be used (we found a "DOCTYPE" declaration).
+	 *表示应该使用DTD验证(我们找到了一个“DOCTYPE”声明)。
 	 */
 	public static final int VALIDATION_DTD = 2;
 
 	/**
-	 * Indicates that XSD validation should be used (found no "DOCTYPE" declaration).
+	 * 表示应该使用XSD验证(没有发现“DOCTYPE”声明)。
 	 */
 	public static final int VALIDATION_XSD = 3;
 
 
 	/**
-	 * The token in a XML document that declares the DTD to use for validation
-	 * and thus that DTD validation is being used.
+	 * XML文档中的令牌，声明用于验证的DTD 因此，正在使用DTD验证。
 	 */
 	private static final String DOCTYPE = "DOCTYPE";
 
 	/**
-	 * The token that indicates the start of an XML comment.
+	 * 表示XML注释的开始的标记
 	 */
 	private static final String START_COMMENT = "<!--";
 
 	/**
-	 * The token that indicates the end of an XML comment.
+	 * 表示XML注释的结束的标记
 	 */
 	private static final String END_COMMENT = "-->";
 
 
 	/**
-	 * Indicates whether or not the current parse position is inside an XML comment.
+	 * 表示当前的解析位置是否在XML注释中
 	 */
 	private boolean inComment;
 
 
 	/**
-	 * Detect the validation mode for the XML document in the supplied {@link InputStream}.
-	 * Note that the supplied {@link InputStream} is closed by this method before returning.
-	 * @param inputStream the InputStream to parse
-	 * @throws IOException in case of I/O failure
+	 * 在提供的{@link InputStream}中检测XML文档的验证模式.
+	  请注意，在返回之前，关闭InputStream
+	 * @param inputStream inputStream解析
+	 * @throws IOException I/O失败的情况下
 	 * @see #VALIDATION_DTD
 	 * @see #VALIDATION_XSD
 	 */
@@ -121,16 +121,16 @@ public class XmlValidationModeDetector {
 
 
 	/**
-	 * Does the content contain the DTD DOCTYPE declaration?
+	 * 检测 内容是否包含DTD DOCTYPE声明?
 	 */
 	private boolean hasDoctype(String content) {
 		return content.contains(DOCTYPE);
 	}
 
-	/**
-	 * Does the supplied content contain an XML opening tag. If the parse state is currently
-	 * in an XML comment then this method always returns false. It is expected that all comment
-	 * tokens will have consumed for the supplied content before passing the remainder to this method.
+	/**所提供的内容包含XML ope tag;
+	 * 如果解析状态是当前状态 在XML注释中，这个方法总是返回false;
+	 * 它是预期的，所有注解符号将会消耗提供的内容 ，在将剩余内容传递给该方法之前
+	 * It is expected that all comment tokens will have consumed for the supplied content before passing the remainder to this method.
 	 */
 	private boolean hasOpeningTag(String content) {
 		if (this.inComment) {

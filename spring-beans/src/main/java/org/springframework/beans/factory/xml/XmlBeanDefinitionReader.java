@@ -51,22 +51,16 @@ import org.springframework.util.xml.SimpleSaxErrorHandler;
 import org.springframework.util.xml.XmlValidationModeDetector;
 
 /**
- * Bean definition reader for XML bean definitions.
- * Delegates the actual XML document reading to an implementation
- * of the {@link BeanDefinitionDocumentReader} interface.
+ * 从XML中读取Bean的读取器。
+ * 将xml文档读取，实现了 {@link BeanDefinitionDocumentReader}接口
  *
- * <p>Typically applied to a
- * {@link org.springframework.beans.factory.support.DefaultListableBeanFactory}
- * or a {@link org.springframework.context.support.GenericApplicationContext}.
+ * <p>一般应用于{@link org.springframework.beans.factory.support.DefaultListableBeanFactory}类,
+ * 或{@link org.springframework.context.support.GenericApplicationContext}类</>
  *
- * <p>This class loads a DOM document and applies the BeanDefinitionDocumentReader to it.
- * The document reader will register each bean definition with the given bean factory,
- * talking to the latter's implementation of the
- * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry} interface.
+ * <p>这个类使用{@link BeanDefinitionDocumentReader}类加载文档.
+ * 这个document reader 将每个Bean定义注册到给定的BeanFactory中,使用了
+ * {@link org.springframework.beans.factory.support.BeanDefinitionRegistry}接口的实现类</>
  *
- * @author Juergen Hoeller
- * @author Rob Harrop
- * @author Chris Beams
  * @since 26.11.2003
  * @see #setDocumentReaderClass
  * @see BeanDefinitionDocumentReader
@@ -76,63 +70,62 @@ import org.springframework.util.xml.XmlValidationModeDetector;
  * @see org.springframework.context.support.GenericApplicationContext
  */
 public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
-
+	//下面这些常量为什么不在使用时直接引用XmlValidationModeDetector类中的，而非要先维护到该类？
 	/**
-	 * Indicates that the validation should be disabled.
+	 * 表示验证应该被禁用
 	 */
 	public static final int VALIDATION_NONE = XmlValidationModeDetector.VALIDATION_NONE;
 
 	/**
-	 * Indicates that the validation mode should be detected automatically.
+	 * 表示验证模式应该被自动检测到
 	 */
 	public static final int VALIDATION_AUTO = XmlValidationModeDetector.VALIDATION_AUTO;
 
 	/**
-	 * Indicates that DTD validation should be used.
+	 * 表示应该使用DTD验证
 	 */
 	public static final int VALIDATION_DTD = XmlValidationModeDetector.VALIDATION_DTD;
 
 	/**
-	 * Indicates that XSD validation should be used.
+	 * 表示应该使用XSD验证。
 	 */
 	public static final int VALIDATION_XSD = XmlValidationModeDetector.VALIDATION_XSD;
 
 
-	/** Constants instance for this class */
+	/** 该类的常量实例（？？？貌似不全是常量啊） */
 	private static final Constants constants = new Constants(XmlBeanDefinitionReader.class);
-
+	/** 验证模式，默认为 自动验证*/
 	private int validationMode = VALIDATION_AUTO;
-
+	/** 命名空间 开启？ (命名空间就是spring.xml中那些 p: 之类的前缀)*/
 	private boolean namespaceAware = false;
-
+	/** 文档读取器 的类对象*/
 	private Class<?> documentReaderClass = DefaultBeanDefinitionDocumentReader.class;
-
+	/** 问题记录器 默认使用{@link FailFastProblemReporter}*/
 	private ProblemReporter problemReporter = new FailFastProblemReporter();
-
+	/** 读取事件监听器，默认使用空的，也就是不对监听到的事件做任何处理*/
 	private ReaderEventListener eventListener = new EmptyReaderEventListener();
-
+	/** 资源提取器，默认使用空的，也就是提取资源方法返回null*/
 	private SourceExtractor sourceExtractor = new NullSourceExtractor();
-
+	/** 命名空间处理解析器，可为空*/
 	@Nullable
 	private NamespaceHandlerResolver namespaceHandlerResolver;
-
+	/** 文档加载器*/
 	private DocumentLoader documentLoader = new DefaultDocumentLoader();
-
+	/** JDK XML 实体对象解析器，可为空*/
 	@Nullable
 	private EntityResolver entityResolver;
-
+	/** JDK XML 异常处理类， 默认使用{@link SimpleSaxErrorHandler}*/
 	private ErrorHandler errorHandler = new SimpleSaxErrorHandler(logger);
-
+	/** XML校验模式检测器*/
 	private final XmlValidationModeDetector validationModeDetector = new XmlValidationModeDetector();
-
+	/** 线程局部变量，保存 编码的资源（目前存在的加载完毕的资源）的set集合*/
 	private final ThreadLocal<Set<EncodedResource>> resourcesCurrentlyBeingLoaded =
 			new NamedThreadLocal<>("XML bean definition resources currently being loaded");
 
 
 	/**
-	 * Create new XmlBeanDefinitionReader for the given bean factory.
-	 * @param registry the BeanFactory to load bean definitions into,
-	 * in the form of a BeanDefinitionRegistry
+	 * 使用给定的BeanFactory创建该类
+	 * @param registry 用于加载bean定义的BeanFactory,以一个{@link BeanDefinitionRegistry}的形式
 	 */
 	public XmlBeanDefinitionReader(BeanDefinitionRegistry registry) {
 		super(registry);
@@ -140,9 +133,10 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
 
 
 	/**
-	 * Set whether to use XML validation. Default is {@code true}.
-	 * <p>This method switches namespace awareness on if validation is turned off,
-	 * in order to still process schema namespaces properly in such a scenario.
+	 * 设置是否使用XML验证 ,默认为true
+	 * <p>如果验证被关闭，该方法将切换名称空间，
+	 * 为了在这样的场景中正确地处理名称空间模式。
+	 *
 	 * @see #setValidationMode
 	 * @see #setNamespaceAware
 	 */

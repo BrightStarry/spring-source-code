@@ -82,24 +82,23 @@ public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationC
 		XmlBeanDefinitionReader beanDefinitionReader = new XmlBeanDefinitionReader(beanFactory);
 
 		// 配置这个XmlBeanDefinitionReader
-		//设置环境类,从该容器类中加载环境类，第一次调用会创建
+		//设置环境类,从该容器类中加载环境类，如果为空会创建(该类应该在ContextLoader类的configureAndRefreshWebApplicationContext()方法中创建过了)
 		beanDefinitionReader.setEnvironment(getEnvironment());
 		//将该容器作为 资源加载器
 		beanDefinitionReader.setResourceLoader(this);
 		//将该类作为参数，创建 资源实体解析器类,设置到环境类中
 		beanDefinitionReader.setEntityResolver(new ResourceEntityResolver(this));
 
-		// Allow a subclass to provide custom initialization of the reader,
-		// then proceed with actually loading the bean definitions.
+		// 允许一个子类为Bean提供自定义的初始化器
+		//该方法默认为空
 		initBeanDefinitionReader(beanDefinitionReader);
+		//通过这个beanDefinitionReader加载Bean
 		loadBeanDefinitions(beanDefinitionReader);
 	}
 
 	/**
-	 * Initialize the bean definition reader used for loading the bean
-	 * definitions of this context. Default implementation is empty.
-	 * <p>Can be overridden in subclasses, e.g. for turning off XML validation
-	 * or using a different XmlBeanDefinitionParser implementation.
+	 * 初始化加载Bean到这个{@link XmlBeanDefinitionReader}中，默认实现为空.
+	 * 子类可以重写该方法
 	 * @param beanDefinitionReader the bean definition reader used by this context
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader#setValidationMode
 	 * @see org.springframework.beans.factory.xml.XmlBeanDefinitionReader#setDocumentReaderClass
@@ -108,12 +107,13 @@ public class XmlWebApplicationContext extends AbstractRefreshableWebApplicationC
 	}
 
 	/**
-	 * Load the bean definitions with the given XmlBeanDefinitionReader.
-	 * <p>The lifecycle of the bean factory is handled by the refreshBeanFactory method;
-	 * therefore this method is just supposed to load and/or register bean definitions.
-	 * <p>Delegates to a ResourcePatternResolver for resolving location patterns
-	 * into Resource instances.
-	 * @throws IOException if the required XML document isn't found
+	 * 使用给定的{@link XmlBeanDefinitionReader}加载定义的bean
+	 * <p>BeanFactory的生命周期由{@link #refreshBeanFactory}方法处理.
+	 * 因此，该方法只要加载和注册定义的bean即可
+	 *
+	 * <p>委托一个{@link org.springframework.core.io.support.ResourcePatternResolver}使用特定模式解析 资源实例
+	 * <p>Delegates to a ResourcePatternResolver for resolving location patterns into Resource instances.
+	 * @throws IOException 如果需要的xml文档找不到
 	 * @see #refreshBeanFactory
 	 * @see #getConfigLocations
 	 * @see #getResources

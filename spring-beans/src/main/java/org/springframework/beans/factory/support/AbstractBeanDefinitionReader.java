@@ -34,8 +34,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Abstract base class for bean definition readers which implement
- * the {@link BeanDefinitionReader} interface.
+ * bean定义读取器 抽象基础类，实现{@link BeanDefinitionReader}接口；
+ *
+ * 提供像bean工厂这样的公共属性 以及用于装入bean类的类装入器；
  *
  * <p>Provides common properties like the bean factory to work on
  * and the class loader to use for loading bean classes.
@@ -112,13 +113,10 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 	}
 
 	/**
-	 * Set the ResourceLoader to use for resource locations.
-	 * If specifying a ResourcePatternResolver, the bean definition reader
-	 * will be capable of resolving resource patterns to Resource arrays.
-	 * <p>Default is PathMatchingResourcePatternResolver, also capable of
-	 * resource pattern resolving through the ResourcePatternResolver interface.
-	 * <p>Setting this to {@code null} suggests that absolute resource loading
-	 * is not available for this bean definition reader.
+	 * 设置ResourceLoader。
+	 * <p>如果指定了一个 {@link ResourcePatternResolver}.该类能将 resource patterns 解析为 Resource arrays。
+	 * <p>默认是{@link PathMatchingResourcePatternResolver},也有 resource pattern通过{@link ResourcePatternResolver}接口解析
+	 * <p>将其设置为null表明绝对的资源加载 这个bean定义阅读器是不可用的
 	 * @see org.springframework.core.io.support.ResourcePatternResolver
 	 * @see org.springframework.core.io.support.PathMatchingResourcePatternResolver
 	 */
@@ -150,9 +148,8 @@ public abstract class AbstractBeanDefinitionReader implements EnvironmentCapable
 	}
 
 	/**
-	 * Set the Environment to use when reading bean definitions. Most often used
-	 * for evaluating profile information to determine which bean definitions
-	 * should be read and which should be omitted.
+	 * 在读取bean定义时设置环境。
+	 * 通常用于评估概要信息，以确定应该读取哪个bean定义，以及应该省略哪些bean。
 	 */
 	public void setEnvironment(Environment environment) {
 		Assert.notNull(environment, "Environment must not be null");

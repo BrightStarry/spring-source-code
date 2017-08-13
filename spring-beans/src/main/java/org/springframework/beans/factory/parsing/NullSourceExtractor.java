@@ -20,7 +20,8 @@ import org.springframework.core.io.Resource;
 import org.springframework.lang.Nullable;
 
 /**
- * Simple implementation of {@link SourceExtractor} that returns {@code null}
+ *  {@link SourceExtractor}接口的简单实现，返回null作为source metadata
+ * Simple implementation of that returns {@code null}
  * as the source metadata.
  *
  * <p>This is the default implementation and prevents too much metadata from being
@@ -32,7 +33,7 @@ import org.springframework.lang.Nullable;
 public class NullSourceExtractor implements SourceExtractor {
 
 	/**
-	 * This implementation simply returns {@code null} for any input.
+	 * 这个方法实现为任何参数都返回null
 	 */
 	@Override
 	@Nullable

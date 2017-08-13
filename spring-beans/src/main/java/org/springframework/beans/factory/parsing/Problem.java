@@ -20,10 +20,9 @@ import org.springframework.lang.Nullable;
 import org.springframework.util.Assert;
 
 /**
- * Represents a problem with a bean definition configuration.
- * Mainly serves as common argument passed into a {@link ProblemReporter}.
- *
- * <p>May indicate a potentially fatal problem (an error) or just a warning.
+ * 表示bean定义配置的问题（exception）。
+ * 它主要作用是作为一个参数传递给{@link ProblemReporter}
+ * <p>可能表明一个潜在的致命问题（fatal）(一个错误(error))或者仅仅是一个警告(warn)。
  *
  * @author Rob Harrop
  * @author Juergen Hoeller

@@ -23,9 +23,11 @@ import org.xml.sax.SAXParseException;
 
 /**
  * Simple {@code org.xml.sax.ErrorHandler} implementation:
- * logs warnings using the given Commons Logging logger instance,
- * and rethrows errors to discontinue the XML transformation.
- *
+   logs warnings using the given Commons Logging logger instance,
+   and rethrows errors to discontinue the XML transformation.
+ * 简单的{@link ErrorHandler}实现类：
+ * 使用给定的 Common Logging 实例 记录 warn
+ * 并重新抛出error，以中断XML转换。
  * @author Juergen Hoeller
  * @since 1.2
  */
@@ -35,8 +37,7 @@ public class SimpleSaxErrorHandler implements ErrorHandler {
 
 
 	/**
-	 * Create a new SimpleSaxErrorHandler for the given
-	 * Commons Logging logger instance.
+	 * 使用给定的 Commons Logging logger 实例创建该类
 	 */
 	public SimpleSaxErrorHandler(Log logger) {
 		this.logger = logger;

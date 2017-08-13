@@ -22,8 +22,7 @@ import org.xml.sax.ErrorHandler;
 import org.xml.sax.InputSource;
 
 /**
- * Strategy interface for loading an XML {@link Document}.
- *
+ * 用于加载XML{@link Document}的策略接口
  * @author Rob Harrop
  * @since 2.0
  * @see DefaultDocumentLoader
@@ -31,16 +30,16 @@ import org.xml.sax.InputSource;
 public interface DocumentLoader {
 
 	/**
-	 * Load a {@link Document document} from the supplied {@link InputSource source}.
-	 * @param inputSource the source of the document that is to be loaded
-	 * @param entityResolver the resolver that is to be used to resolve any entities
-	 * @param errorHandler used to report any errors during document loading
-	 * @param validationMode the type of validation
+	 * 通过提供的{@link InputSource}加载一个{@link Document}
+	 * @param inputSource 要加载的文档的源文件
+	 * @param entityResolver 用来解析任何实体的解析器{@link EntityResolver}
+	 * @param errorHandler 用于在文档加载期间报告任何错误{@link ErrorHandler}
+	 * @param validationMode 验证类型
 	 * {@link org.springframework.util.xml.XmlValidationModeDetector#VALIDATION_DTD DTD}
 	 * or {@link org.springframework.util.xml.XmlValidationModeDetector#VALIDATION_XSD XSD})
-	 * @param namespaceAware {@code true} if support for XML namespaces is to be provided
-	 * @return the loaded {@link Document document}
-	 * @throws Exception if an error occurs
+	 * @param namespaceAware 如果要提供对XML名称空间的支持，则为true
+	 * @return 加载的{@link Document }
+	 * @throws Exception 如果发生错误
 	 */
 	Document loadDocument(
 			InputSource inputSource, EntityResolver entityResolver,
